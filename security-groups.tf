@@ -29,3 +29,28 @@ resource "aws_security_group" "my_public_app_sg" {
         cidr_blocks = ["0.0.0.0/0"]
     }  
 }
+
+resource "aws_security_group" "my_private_app_sg" {
+  name        = "my_private_app_sg"
+  description = "Allow access to the server"
+  vpc_id      = data.aws_vpc.main_vpc.id
+
+
+  # INBOUND CONNECTIONS
+  ingress {
+    description = "allowd ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    security_groups = ["sg-03c546a60b1b3b188"]
+
+  }
+
+  egress {
+    description = "Allow access to the world"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" #TCP + UDP
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
